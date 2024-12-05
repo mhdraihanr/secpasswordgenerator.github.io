@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request
+from flask_frozen import Freezer
 import random
 import string
 
 app = Flask(__name__)
+freezer = Freezer(app)
+
 
 # fungsi untuk mencheck kekuatan passwordnya
 def check_password_strength(password):
@@ -15,7 +18,7 @@ def check_password_strength(password):
     # skor dihitung berdasarkan jumlah kategori
     strength_score = sum([length_score, has_uppercase, has_lowercase, has_digit, has_special])
 
-    # Penentuan level kekuatan berdasarkan skor
+    # penentuan level kekuatan berdasarkan skor
     if strength_score == 5:
         return "Sangat Kuat"
     elif strength_score == 4:
@@ -25,7 +28,7 @@ def check_password_strength(password):
     else:
         return "Lemah"
 
-# Fungsi untuk membuat password yang aman
+# fungsi untuk membuat password yang aman 
 def generate_secure_password(length=12):
     if length < 8:
         raise ValueError("Panjang password minimal adalah 8 karakter.")
@@ -63,3 +66,4 @@ def check_strength():
 
 if __name__ == "__main__":
     app.run(debug=True)
+    freezer.freeze()
