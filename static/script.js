@@ -1,29 +1,47 @@
+// Tunggu hingga seluruh halaman selesai dimuat
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("JavaScript is working!"); // Debugging log
+    console.log("JavaScript loaded successfully!"); // Debugging log
+
+    // Ambil tombol toggle dark mode
     const darkModeToggle = document.getElementById("darkModeToggle");
+
+    // Cek apakah tombol ditemukan
     if (!darkModeToggle) {
-        console.error("Dark mode button not found!"); // Cek elemen tombol
+        console.error("Dark mode toggle button not found!"); // Debugging log
         return;
     }
 
-    // Cek LocalStorage
-    if (localStorage.getItem("dark-mode") === "enabled") {
-        console.log("Dark mode was enabled previously."); // Debugging log
-        document.body.classList.add("dark-mode");
-        darkModeToggle.textContent = "☀️ Light Mode";
+    // Periksa preferensi sebelumnya dari LocalStorage
+    const darkModePreference = localStorage.getItem("dark-mode");
+    if (darkModePreference === "enabled") {
+        enableDarkMode(darkModeToggle); // Aktifkan dark mode
+    } else {
+        disableDarkMode(darkModeToggle); // Nonaktifkan dark mode
     }
 
+    // Tambahkan event listener untuk tombol
     darkModeToggle.addEventListener("click", () => {
-        console.log("Dark mode toggle clicked!"); // Debugging log
-        document.body.classList.toggle("dark-mode");
-
-        // Simpan preferensi
+        // Toggle dark mode saat tombol diklik
         if (document.body.classList.contains("dark-mode")) {
-            localStorage.setItem("dark-mode", "enabled");
-            darkModeToggle.textContent = "☀️ Light Mode";
+            disableDarkMode(darkModeToggle); // Nonaktifkan dark mode
+            localStorage.setItem("dark-mode", "disabled"); // Simpan preferensi
         } else {
-            localStorage.setItem("dark-mode", "disabled");
-            darkModeToggle.textContent = "🌙 Dark Mode";
+            enableDarkMode(darkModeToggle); // Aktifkan dark mode
+            localStorage.setItem("dark-mode", "enabled"); // Simpan preferensi
         }
     });
 });
+
+// Fungsi untuk mengaktifkan dark mode
+function enableDarkMode(toggleButton) {
+    document.body.classList.add("dark-mode");
+    toggleButton.textContent = "☀️ Light Mode"; // Ubah teks tombol
+    console.log("Dark mode enabled!"); // Debugging log
+}
+
+// Fungsi untuk menonaktifkan dark mode
+function disableDarkMode(toggleButton) {
+    document.body.classList.remove("dark-mode");
+    toggleButton.textContent = "🌙 Dark Mode"; // Ubah teks tombol
+    console.log("Dark mode disabled!"); // Debugging log
+}

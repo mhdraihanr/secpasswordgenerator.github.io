@@ -1,30 +1,43 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --box-shadow-light: 0 4px 10px rgba(0, 0, 0, 0.1);
+    --box-shadow-dark: 0 4px 10px rgba(86, 86, 86, 0.3);
+}
+/* Dark Mode */
+body.dark-mode {
+    --bg-color: #272525;
+    --text-color: #ffffff;
+    --button-bg: #1f1f1f;
+    --button-text: #007bff;
+}
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
-/* Dark Mode */
-body.dark-mode {
-    --bg-color: #121212;
-    --text-color: #ffffff;
-    --button-bg: #1f1f1f;
-    --button-text: #007bff;
-}
+
 
 .container {
     width: 90%;
     max-width: 500px;
-    background: #ffffff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow-light);
     text-align: center;
+}
+/* Dark Mode container */
+body.dark-mode .container {
+    box-shadow: var(--box-shadow-dark); /* Box-shadow untuk dark mode */
 }
 
 h1 {
@@ -36,8 +49,8 @@ h1 {
 h2 {
     font-size: 18px;
     margin-bottom: 10px;
-    color: #333;
-}
+    color: var(--text-color);
+}   
 
 .form-container {
     margin-bottom: 20px;
@@ -47,6 +60,8 @@ input[type="text"],
 input[type="number"] {
     width: calc(100% - 20px);
     padding: 10px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -69,7 +84,8 @@ button:hover {
 }
 
 .result {
-    background-color: #f0f8ff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #d4edda;
