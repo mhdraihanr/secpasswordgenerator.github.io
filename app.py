@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request
-from flask_frozen import Freezer
 import random
 import string
 
 app = Flask(__name__)
-freezer = Freezer(app)
 
 
 # fungsi untuk mencheck kekuatan passwordnya
@@ -65,5 +63,4 @@ def check_strength():
     return render_template("check.html", strength=strength, password=password)
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    freezer.freeze()
+     app.run(host="0.0.0.0", port=5000)
