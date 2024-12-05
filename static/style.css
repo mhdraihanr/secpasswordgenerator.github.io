@@ -1,9 +1,3 @@
-:root {
-    --bg-color: #ffffff;
-    --text-color: #000000;
-    --button-bg: #007bff;
-    --button-text: #ffffff;
-}
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
