@@ -91,3 +91,10 @@ button:hover {
     border: 1px solid #d4edda;
     margin-top: 10px;
 }
+.creator {
+    font-size: 0.8em; /* Ukuran font kecil */
+    color: var(--text-color); /* Sesuaikan warna dengan tema */
+    margin-top: 10px; /* Beri jarak dari elemen sebelumnya */
+    text-align: center; /* Teks rata tengah */
+    opacity: 0.7; /* Transparansi untuk efek lebih halus */
+}
