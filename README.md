@@ -70,9 +70,22 @@ Daftar dependencies Python yang akan diinstall oleh Vercel.
 
 ## Troubleshooting
 
-1. **Error 404**: Pastikan vercel.json sudah benar dan file api/index.py ada
-2. **Template not found**: Pastikan path template_folder dan static_folder di api/index.py sudah benar
-3. **Module not found**: Pastikan semua dependencies ada di requirements.txt
+1. **Error 500 FUNCTION_INVOCATION_FAILED**: 
+   - Pastikan api/index.py menggunakan path absolut untuk templates dan static
+   - Pastikan vercel.json memiliki konfigurasi yang benar
+   - Cek runtime.txt untuk versi Python yang tepat
+
+2. **Error 404**: Pastikan vercel.json sudah benar dan file api/index.py ada
+
+3. **Template not found**: 
+   - Pastikan path template_folder dan static_folder di api/index.py menggunakan Path absolut
+   - Verifikasi struktur folder: templates/ dan static/ harus di root project
+
+4. **Static files tidak load**: 
+   - Pastikan vercel.json memiliki build untuk static files
+   - Cek routing untuk /static/ di vercel.json
+
+5. **Module not found**: Pastikan semua dependencies ada di requirements.txt
 
 ## Fitur Aplikasi
 

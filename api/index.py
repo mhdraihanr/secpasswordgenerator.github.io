@@ -2,8 +2,17 @@ from flask import Flask, render_template, request
 import random
 import string
 import os
+from pathlib import Path
 
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
+# Dapatkan path absolut untuk template dan static
+base_dir = Path(__file__).parent.parent
+template_dir = base_dir / 'templates'
+static_dir = base_dir / 'static'
+
+app = Flask(__name__, 
+           template_folder=str(template_dir),
+           static_folder=str(static_dir),
+           static_url_path='/static')
 
 # fungsi untuk mencheck kekuatan passwordnya
 def check_password_strength(password):
@@ -62,9 +71,8 @@ def check_strength():
             strength = check_password_strength(password)
     return render_template("check.html", strength=strength, password=password)
 
-# Handler untuk Vercel
-def handler(request):
-    return app(request.environ, lambda status, headers: None)
+# Export app untuk Vercel
+# Vercel akan otomatis mendeteksi variabel 'app' sebagai WSGI application
 
 if __name__ == "__main__":
     app.run(debug=True)
