@@ -62,30 +62,39 @@ vercel env add
 ### vercel.json
 File konfigurasi yang memberitahu Vercel cara menjalankan aplikasi Python/Flask.
 
-### api/index.py
-File utama yang akan dijalankan oleh Vercel. Ini adalah copy dari app.py dengan penyesuaian path untuk template dan static files.
+### api/app.py
+File utama yang akan dijalankan oleh Vercel. Menggunakan inline templates untuk menghindari masalah path di serverless environment.
+
+### api/index.py (backup)
+File backup dengan external templates (mungkin menyebabkan masalah path di Vercel).
 
 ### requirements.txt
 Daftar dependencies Python yang akan diinstall oleh Vercel.
 
 ## Troubleshooting
 
-1. **Error 500 FUNCTION_INVOCATION_FAILED**: 
-   - Pastikan api/index.py menggunakan path absolut untuk templates dan static
-   - Pastikan vercel.json memiliki konfigurasi yang benar
-   - Cek runtime.txt untuk versi Python yang tepat
+1. **Deployment Failed**: 
+   - Coba gunakan api/app.py (dengan inline templates) sebagai entry point
+   - Pastikan vercel.json mengarah ke file yang benar
+   - Hapus runtime.txt jika menyebabkan konflik
+   - Gunakan konfigurasi vercel.json yang sederhana
 
-2. **Error 404**: Pastikan vercel.json sudah benar dan file api/index.py ada
+2. **Error 500 FUNCTION_INVOCATION_FAILED**: 
+   - Pastikan tidak ada masalah dengan path templates dan static files
+   - Gunakan inline templates sebagai solusi alternatif
+   - Cek logs di Vercel dashboard untuk detail error
 
-3. **Template not found**: 
-   - Pastikan path template_folder dan static_folder di api/index.py menggunakan Path absolut
-   - Verifikasi struktur folder: templates/ dan static/ harus di root project
-
-4. **Static files tidak load**: 
-   - Pastikan vercel.json memiliki build untuk static files
-   - Cek routing untuk /static/ di vercel.json
-
-5. **Module not found**: Pastikan semua dependencies ada di requirements.txt
+3. **Error 404**: Pastikan vercel.json sudah benar dan file entry point ada
+ 
+ 4. **Template not found**: 
+    - Gunakan inline templates (api/app.py) untuk menghindari masalah path
+    - Jika menggunakan external templates, pastikan path absolut benar
+ 
+ 5. **Static files tidak load**: 
+    - Inline CSS/JS (seperti di api/app.py) adalah solusi terbaik untuk Vercel
+    - Alternatif: tambahkan build configuration untuk static files
+ 
+ 6. **Module not found**: Pastikan semua dependencies ada di requirements.txt
 
 ## Fitur Aplikasi
 

@@ -2,17 +2,21 @@ from flask import Flask, render_template, request
 import random
 import string
 import os
-from pathlib import Path
 
-# Dapatkan path absolut untuk template dan static
-base_dir = Path(__file__).parent.parent
-template_dir = base_dir / 'templates'
-static_dir = base_dir / 'static'
+# Konfigurasi Flask untuk Vercel
+app = Flask(__name__)
 
-app = Flask(__name__, 
-           template_folder=str(template_dir),
-           static_folder=str(static_dir),
-           static_url_path='/static')
+# Set path untuk templates dan static files
+try:
+    # Path untuk production di Vercel
+    template_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
+    static_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
+    app.template_folder = template_path
+    app.static_folder = static_path
+except:
+    # Fallback ke relative path
+    app.template_folder = '../templates'
+    app.static_folder = '../static'
 
 # fungsi untuk mencheck kekuatan passwordnya
 def check_password_strength(password):
