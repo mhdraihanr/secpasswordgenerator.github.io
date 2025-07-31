@@ -1,49 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Password Strength Checker</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
-
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <button id="darkModeToggle">🌙 Dark Mode</button>
-        <h1>Alat Pembuat Password yang Aman  </h1>
+      <button id="darkModeToggle">🌙 Dark Mode</button>
+      <h1>Alat Pembuat Password yang Aman</h1>
 
-        <!-- Form untuk memeriksa kekuatan password -->
-        <div class="form-container">
-            <form method="post">
-                <h2>Memeriksa Keamanan Passwordmu</h2>
-                <input type="text" name="password" placeholder="Enter your password" required>
-                <button type="submit" name="check">Check</button>
-            </form>
-        </div>
+      <!-- Form untuk memeriksa kekuatan password -->
+      <div class="form-container">
+        <form method="post">
+          <h2>Memeriksa Keamanan Passwordmu</h2>
+          <input
+            type="text"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+          <button type="submit" name="check">Check</button>
+        </form>
+      </div>
 
-        <!-- Form untuk generate password -->
-        <div class="form-container">
-            <form method="post">
-                <h2>Membuat Password yang Aman</h2>
-                <input type="number" name="length" placeholder="Password length (min 8)" min="8"  required>
-                <button type="submit" name="generate">Hasilkan</button>
-            </form>
-        </div>
+      <!-- Form untuk generate password -->
+      <div class="form-container">
+        <form method="post">
+          <h2>Buat Password yang Aman</h2>
+          <input
+            type="number"
+            name="length"
+            placeholder="Password length (min 8)"
+            min="8"
+            required
+          />
+          <button type="submit" name="generate">Hasilkan</button>
+        </form>
+      </div>
 
-        <!-- Hasil -->
-        {% if password %}
-            <div class="result">
-                <h2>Hasil:</h2>
-                <p><strong>Password:</strong> {{ password }}</p>
-                <p><strong>Tingkat Keamanan:</strong> {{ strength }}</p>
-            </div>
-        {% endif %}
+      <!-- Hasil -->
+      {% if password %}
+      <div class="result">
+        <h2>Hasil:</h2>
+        <p><strong>Password:</strong> {{ password }}</p>
+        <p><strong>Tingkat Keamanan:</strong> {{ strength }}</p>
+      </div>
+      {% endif %}
 
-        <!-- Teks "Created by 4bdul" -->
-         <p class="creator">Created by 4bdul</p>
+      <!-- Teks "Created by 4bdul" -->
+      <p class="creator">Created by Raihan</p>
     </div>
-
-</body>
+  </body>
 </html>
- 

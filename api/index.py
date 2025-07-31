@@ -1,35 +1,199 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify, render_template_string
 import random
 import string
 import os
 
-# Konfigurasi Flask untuk Vercel
 app = Flask(__name__)
 
-# Set path untuk templates dan static files
-try:
-    # Path untuk production di Vercel
-    template_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
-    static_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
-    app.template_folder = template_path
-    app.static_folder = static_path
-except:
-    # Fallback ke relative path
-    app.template_folder = '../templates'
-    app.static_folder = '../static'
+# Template HTML inline
+HTML_TEMPLATE = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --box-shadow-light: 0 4px 10px rgba(0, 0, 0, 0.1);
+            --box-shadow-dark: 0 4px 10px rgba(86, 86, 86, 0.3);
+        }
+        body.dark-mode {
+            --bg-color: #272525;
+            --text-color: #ffffff;
+            --button-bg: #1f1f1f;
+            --button-text: #007bff;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow-light);
+            text-align: center;
+        }
+        body.dark-mode .container {
+            box-shadow: var(--box-shadow-dark);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #fa1212;
+        }
+        h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #00cfda;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #00b8c4;
+        }
+        .result {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #d4edda;
+            margin-top: 10px;
+        }
+        .creator {
+            font-size: 0.8em;
+            color: var(--text-color);
+            margin-top: 10px;
+            text-align: center;
+            opacity: 0.7;
+        }
+        #darkModeToggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="darkModeToggle">🌙 Dark Mode</button>
+        <h1>Alat Pembuat Password yang Aman</h1>
 
-# fungsi untuk mencheck kekuatan passwordnya
+        <div class="form-container">
+            <form method="post">
+                <h2>Memeriksa Keamanan Passwordmu</h2>
+                <input type="text" name="password" placeholder="Enter your password" required>
+                <button type="submit" name="check">Check</button>
+            </form>
+        </div>
+
+        <div class="form-container">
+            <form method="post">
+                <h2>Membuat Password yang Aman</h2>
+                <input type="number" name="length" placeholder="Password length (min 8)" min="8" required>
+                <button type="submit" name="generate">Hasilkan</button>
+            </form>
+        </div>
+
+        {% if password %}
+            <div class="result">
+                <h2>Hasil:</h2>
+                <p><strong>Password:</strong> {{ password }}</p>
+                <p><strong>Tingkat Keamanan:</strong> {{ strength }}</p>
+            </div>
+        {% endif %}
+
+        <p class="creator">Created by 4bdul</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const darkModeToggle = document.getElementById("darkModeToggle");
+            
+            const darkModePreference = localStorage.getItem("dark-mode");
+            if (darkModePreference === "enabled") {
+                enableDarkMode(darkModeToggle);
+            } else {
+                disableDarkMode(darkModeToggle);
+            }
+            
+            darkModeToggle.addEventListener("click", () => {
+                if (document.body.classList.contains("dark-mode")) {
+                    disableDarkMode(darkModeToggle);
+                    localStorage.setItem("dark-mode", "disabled");
+                } else {
+                    enableDarkMode(darkModeToggle);
+                    localStorage.setItem("dark-mode", "enabled");
+                }
+            });
+        });
+        
+        function enableDarkMode(toggleButton) {
+            document.body.classList.add("dark-mode");
+            toggleButton.textContent = "☀️ Light Mode";
+        }
+        
+        function disableDarkMode(toggleButton) {
+            document.body.classList.remove("dark-mode");
+            toggleButton.textContent = "🌙 Dark Mode";
+        }
+    </script>
+</body>
+</html>
+'''
+
 def check_password_strength(password):
     length_score = len(password) >= 12
     has_uppercase = any(char.isupper() for char in password)
     has_lowercase = any(char.islower() for char in password)
     has_digit = any(char.isdigit() for char in password)
     has_special = any(char in string.punctuation for char in password)
-
-    # skor dihitung berdasarkan jumlah kategori
+    
     strength_score = sum([length_score, has_uppercase, has_lowercase, has_digit, has_special])
-
-    # penentuan level kekuatan berdasarkan skor
+    
     if strength_score == 5:
         return "Sangat Kuat"
     elif strength_score == 4:
@@ -39,7 +203,6 @@ def check_password_strength(password):
     else:
         return "Lemah"
 
-# fungsi untuk membuat password yang aman 
 def generate_secure_password(length=12):
     if length < 8:
         raise ValueError("Panjang password minimal adalah 8 karakter.")
@@ -60,23 +223,22 @@ def generate_secure_password(length=12):
     random.shuffle(password_list)
     return ''.join(password_list)
 
-# Route untuk halaman utama
 @app.route("/", methods=["GET", "POST"])
-def check_strength():
+def index():
     strength = None
     password = None
     if request.method == "POST":
-        if "generate" in request.form:  # Jika pengguna menekan tombol "Generate Password"
+        if "generate" in request.form:
             length = int(request.form.get("length", 12))
             password = generate_secure_password(length)
             strength = check_password_strength(password)
-        elif "check" in request.form:  # Jika pengguna menekan tombol "Periksa Kekuatan"
+        elif "check" in request.form:
             password = request.form["password"]
             strength = check_password_strength(password)
-    return render_template("check.html", strength=strength, password=password)
+    return render_template_string(HTML_TEMPLATE, strength=strength, password=password)
 
 # Export app untuk Vercel
-# Vercel akan otomatis mendeteksi variabel 'app' sebagai WSGI application
+app = app
 
 if __name__ == "__main__":
     app.run(debug=True)
