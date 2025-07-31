@@ -12,7 +12,7 @@ HTML_TEMPLATE = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Strength Checker</title>
+    <title>Secure Password Generator</title>
     <style>
         :root {
             --bg-color: #ffffff;
@@ -120,33 +120,33 @@ HTML_TEMPLATE = '''
 <body>
     <div class="container">
         <button id="darkModeToggle">🌙 Dark Mode</button>
-        <h1>Alat Pembuat Password yang Aman</h1>
+        <h1>Secure Password Generator</h1>
 
         <div class="form-container">
             <form method="post">
-                <h2>Memeriksa Keamanan Passwordmu</h2>
-                <input type="text" name="password" placeholder="Enter your password" required>
-                <button type="submit" name="check">Check</button>
+                <h2>Check Password Strength</h2>
+                <input type="text" name="password" placeholder="Enter your password to analyze" required>
+                <button type="submit" name="check">Analyze Security</button>
             </form>
         </div>
 
         <div class="form-container">
             <form method="post">
-                <h2>Membuat Password yang Aman</h2>
-                <input type="number" name="length" placeholder="Password length (min 8)" min="8" required>
-                <button type="submit" name="generate">Hasilkan</button>
+                <h2>Generate Secure Password</h2>
+                <input type="number" name="length" placeholder="Password length (minimum 8 characters)" min="8" required>
+                <button type="submit" name="generate">Generate Password</button>
             </form>
         </div>
 
         {% if password %}
             <div class="result">
-                <h2>Hasil:</h2>
-                <p><strong>Password:</strong> {{ password }}</p>
-                <p><strong>Tingkat Keamanan:</strong> {{ strength }}</p>
+                <h2>Results:</h2>
+                <p><strong>Generated Password:</strong> {{ password }}</p>
+                <p><strong>Security Level:</strong> {{ strength }}</p>
             </div>
         {% endif %}
 
-        <p class="creator">Created by 4bdul</p>
+        <p class="creator">Crafted with ❤️ by mhd_raihanr</p>
     </div>
 
     <script>
@@ -195,13 +195,13 @@ def check_password_strength(password):
     strength_score = sum([length_score, has_uppercase, has_lowercase, has_digit, has_special])
     
     if strength_score == 5:
-        return "Sangat Kuat"
+        return "Very Strong"
     elif strength_score == 4:
-        return "Kuat"
+        return "Strong"
     elif strength_score == 3:
-        return "Sedang"
+        return "Moderate"
     else:
-        return "Lemah"
+        return "Weak"
 
 def generate_secure_password(length=12):
     if length < 8:
